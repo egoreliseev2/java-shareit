@@ -1,7 +1,5 @@
 package ru.practicum.shareit.item;
 
-import lombok.Getter;
-import lombok.Setter;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 

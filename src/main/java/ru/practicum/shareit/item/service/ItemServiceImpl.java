@@ -14,22 +14,22 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class ItemServiceImpl implements ItemService{
+public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
 
     @Override
-    public List<ItemDto> findAll(long userId){
+    public List<ItemDto> findAll(long userId) {
         return itemRepository.findAll(userId);
     }
 
     @Override
-    public ItemDto findItem(long itemId){
+    public ItemDto findItem(long itemId) {
         return itemRepository.findItem(itemId).orElseThrow(() -> new NotFoundException("item", itemId));
     }
 
     @Override
-    public List<ItemDto> searchItem(String text){
+    public List<ItemDto> searchItem(String text) {
         if (text.isBlank()) {
             return Collections.emptyList();
         }
@@ -37,13 +37,13 @@ public class ItemServiceImpl implements ItemService{
     }
 
     @Override
-    public ItemDto create(long userId, ItemDto itemDto){
+    public ItemDto create(long userId, ItemDto itemDto) {
         userRepository.getById(userId).orElseThrow(() -> new NotFoundException("user", userId));
         return itemRepository.create(userId,itemDto);
     }
 
     @Override
-    public ItemDto update(long userId, long itemId, Item item){
+    public ItemDto update(long userId, long itemId, Item item) {
         itemRepository.findItemForUpdate(userId,itemId).orElseThrow(() -> new NotFoundException("Item",itemId));
         return itemRepository.update(userId,itemId,item);
     }

@@ -82,7 +82,7 @@ public class ItemRepositoryImpl implements ItemRepository {
         if (item.getDescription() != null) {
             repoItem.setDescription(item.getDescription());
         }
-        if (item.getAvailable() != null){
+        if (item.getAvailable() != null) {
             repoItem.setAvailable(item.getAvailable());
         }
         items.get(userId).removeIf(item1 -> item1.getId() == itemId);

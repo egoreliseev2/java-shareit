@@ -41,14 +41,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(long id){
+    public void delete(long id) {
         userRepository.delete(id);
     }
 
-    private void checkEmailDuplicates(String email){
+    private void checkEmailDuplicates(String email) {
         List<User> users = userRepository.findAll();
         boolean check = users.stream().anyMatch(repoUser -> repoUser.getEmail().equals(email));
-        if(check){
+        if (check) {
             throw new DuplicateEmailException(email);
         }
     }

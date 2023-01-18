@@ -13,29 +13,29 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
-public class UserRepositoryImpl implements UserRepository{
+public class UserRepositoryImpl implements UserRepository {
     private final Map<Long, User> users = new HashMap<>();
     private long id = 1;
 
     @Override
-    public List<User> findAll(){
+    public List<User> findAll() {
         return new ArrayList<>(users.values());
     }
 
     @Override
-    public Optional<User> getById(long id){
+    public Optional<User> getById(long id) {
         return Optional.ofNullable(users.get(id));
     }
 
     @Override
-    public UserDto create(UserDto userDto){
+    public UserDto create(UserDto userDto) {
         userDto.setId(id++);
         users.put(userDto.getId(), UserMapper.toUser(userDto));
         return userDto;
     }
 
     @Override
-    public User update(long idOfUser,User user){
+    public User update(long idOfUser,User user) {
         if (users.containsKey(idOfUser)) {
             if (user.getName() != null) {
                 users.get(idOfUser).setName(user.getName());
@@ -44,14 +44,13 @@ public class UserRepositoryImpl implements UserRepository{
                 users.get(idOfUser).setEmail(user.getEmail());
             }
             return users.get(idOfUser);
-        }
-        else {
+        } else {
             throw new NotFoundException("User",user.getId());
         }
     }
 
     @Override
-    public void delete(long id){
+    public void delete(long id) {
         users.remove(id);
     }
 
