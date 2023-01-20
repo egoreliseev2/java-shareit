@@ -15,13 +15,15 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ItemController {
     private final ItemService itemService;
+    private final String header = "X-Sharer-User-Id";
+    private final String path = "/{itemId}";
 
     @GetMapping
-    public List<ItemDto> findAll(@RequestHeader("X-Sharer-User-Id") long id) {
+    public List<ItemDto> findAll(@RequestHeader(header) long id) {
         return itemService.findAll(id);
     }
 
-    @GetMapping("/{itemId}")
+    @GetMapping(path)
     public ItemDto findItem(@PathVariable long itemId) {
         return itemService.findItem(itemId);
     }
@@ -32,12 +34,12 @@ public class ItemController {
     }
 
     @PostMapping
-    public ItemDto create(@RequestHeader("X-Sharer-User-Id") long userId, @Valid @RequestBody ItemDto itemDto) {
+    public ItemDto create(@RequestHeader(header) long userId, @Valid @RequestBody ItemDto itemDto) {
         return itemService.create(userId, itemDto);
     }
 
-    @PatchMapping("/{itemId}")
-    public ItemDto update(@RequestHeader("X-Sharer-User-Id") long userId, @PathVariable long itemId, @RequestBody Item item) {
+    @PatchMapping(path)
+    public ItemDto update(@RequestHeader(header) long userId, @PathVariable long itemId, @RequestBody Item item) {
         return itemService.update(userId, itemId, item);
     }
 }
