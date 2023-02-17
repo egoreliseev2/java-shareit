@@ -2,30 +2,41 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.comment.dto.CommentDto;
+import ru.practicum.shareit.item.dto.ItemBookingDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.user.Create;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ItemController {
+
     private final ItemService itemService;
-    private final String header = "X-Sharer-User-Id";
-    private final String path = "/{itemId}";
 
     @GetMapping
-    public List<ItemDto> findAll(@RequestHeader(header) long id) {
+    public List<ItemBookingDto> findAll(@RequestHeader("X-Sharer-User-Id") long id) {
         return itemService.findAll(id);
     }
 
-    @GetMapping(path)
-    public ItemDto findItem(@PathVariable long itemId) {
-        return itemService.findItem(itemId);
+    @GetMapping("/{itemId}")
+    public ItemBookingDto findItem(@RequestHeader("X-Sharer-User-Id") long userId, @PathVariable long itemId) {
+        return itemService.findItem(userId, itemId);
+    }
+
+    @PostMapping
+    public ItemDto create(@RequestHeader("X-Sharer-User-Id") long userId, @Validated(Create.class) @RequestBody ItemDto itemDto) {
+        return itemService.create(userId, itemDto);
+    }
+
+    @PatchMapping("/{itemId}")
+    public ItemDto update(@RequestHeader("X-Sharer-User-Id") long userId, @PathVariable long itemId, @RequestBody ItemDto itemDto) {
+        return itemService.update(userId, itemId, itemDto);
     }
 
     @GetMapping("/search")
@@ -33,13 +44,10 @@ public class ItemController {
         return itemService.searchItem(text);
     }
 
-    @PostMapping
-    public ItemDto create(@RequestHeader(header) long userId, @Valid @RequestBody ItemDto itemDto) {
-        return itemService.create(userId, itemDto);
-    }
-
-    @PatchMapping(path)
-    public ItemDto update(@RequestHeader(header) long userId, @PathVariable long itemId, @RequestBody Item item) {
-        return itemService.update(userId, itemId, item);
+    @PostMapping("/{itemId}/comment")
+    public CommentDto addComment(@RequestHeader("X-Sharer-User-Id") long userId,
+                                 @PathVariable long itemId,
+                                 @Validated(Create.class) @RequestBody CommentDto commentDto) {
+        return itemService.addComment(userId, itemId, commentDto);
     }
 }
