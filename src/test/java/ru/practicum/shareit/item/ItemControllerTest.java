@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class ItemControllerTest {
     private final ObjectMapper objectMapper;
+    private final String header = "X-Sharer-User-Id";
     private final MockMvc mvc;
     @MockBean
     ItemService itemService;
@@ -58,7 +59,7 @@ class ItemControllerTest {
         mvc.perform(get("/items")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L))
+                        .header(header, 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].name").value("name"))
@@ -75,7 +76,7 @@ class ItemControllerTest {
         mvc.perform(get("/items/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L))
+                        .header(header, 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.name").value("name"))
@@ -89,7 +90,7 @@ class ItemControllerTest {
         mvc.perform(post("/items")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(header, 1L)
                         .content(objectMapper.writeValueAsString(itemDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
@@ -106,7 +107,7 @@ class ItemControllerTest {
                         .content(objectMapper.writeValueAsString(forUpdate))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L))
+                        .header(header, 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.name").value("updated"))
@@ -122,7 +123,7 @@ class ItemControllerTest {
                         .content(objectMapper.writeValueAsString(forUpdate))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L))
+                        .header(header, 1L))
                 .andExpect(status().isNotFound())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof NotFoundException))
                 .andExpect(result -> assertEquals("Item not found",
@@ -136,7 +137,7 @@ class ItemControllerTest {
         mvc.perform(get("/items/search?text=дрель")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L))
+                        .header(header, 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].name").value("name"))
@@ -158,7 +159,7 @@ class ItemControllerTest {
         mvc.perform(post("/items/1/comment")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(header, 1L)
                         .content(objectMapper.writeValueAsString(commentDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
