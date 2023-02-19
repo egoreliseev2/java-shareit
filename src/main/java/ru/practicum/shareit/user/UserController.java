@@ -13,11 +13,12 @@ import java.util.List;
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserController {
+
     private final UserService userService;
 
     @GetMapping
-    public List<UserDto> findAll() {
-        return userService.findAll();
+    public List<UserDto> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
@@ -39,5 +40,4 @@ public class UserController {
     public void delete(@PathVariable long id) {
         userService.delete(id);
     }
-
 }

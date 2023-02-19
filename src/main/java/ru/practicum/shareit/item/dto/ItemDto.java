@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 public class ItemDto {
     long id;
     @NotBlank(groups = Create.class)
@@ -20,4 +21,5 @@ public class ItemDto {
     String description;
     @NotNull(groups = Create.class)
     Boolean available;
+    Long requestId;
 }

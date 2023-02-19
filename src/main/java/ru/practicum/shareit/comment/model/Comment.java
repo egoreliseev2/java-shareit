@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "COMMENTS")
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

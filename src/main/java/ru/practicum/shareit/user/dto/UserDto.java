@@ -13,12 +13,13 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserDto {
     Long id;
     @NotBlank(groups = Create.class)
     String name;
-    @Email(groups = {Create.class, Update.class})
     @NotNull(groups = Create.class)
+    @Email(groups = {Create.class, Update.class})
     String email;
 }

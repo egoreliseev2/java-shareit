@@ -26,7 +26,7 @@ public class BookingMapper {
     }
 
     public static BookingResponseDto toBookingDtoResponse(Booking booking) {
-        return new BookingResponseDto(booking.getId(),
+            return new BookingResponseDto(booking.getId(),
                 booking.getStart(),
                 booking.getEnd(),
                 booking.getItem(),
