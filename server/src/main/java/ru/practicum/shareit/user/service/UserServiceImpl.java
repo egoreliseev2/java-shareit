@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getById(long id) {
         User user = userRepository.findById(id).orElseThrow(() -> {
             log.warn("User with id {} not found", id);
-            throw new ObjectNotFoundException("User not found");
+            throw new ObjectNotFoundException("User",id);
         });
         return UserMapper.toUserDto(user);
     }
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     public UserDto update(long id, UserDto userDto) {
         User user = userRepository.findById(id).orElseThrow(() -> {
             log.warn("User with id {} not found", id);
-            throw new ObjectNotFoundException("User not found");
+            throw new ObjectNotFoundException("User",id);
         });
         if (userDto.getEmail() != null) user.setEmail(userDto.getEmail());
         if (userDto.getName() != null) user.setName(userDto.getName());

@@ -36,12 +36,12 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public BookingResponseDto create(long bookerId, BookingDto bookingDto) {
         Item item = itemRepository.findById(bookingDto.getItemId()).orElseThrow(() -> {
-            throw new ObjectNotFoundException("Item not found");
+            throw new ObjectNotFoundException("item",bookerId);
         });
         User user = userRepository.findById(bookerId).orElseThrow(() -> {
-            throw new ObjectNotFoundException("Wrong user");
+            throw new ObjectNotFoundException("user",bookerId);
         });
-        if (item.getOwner().getId() == bookerId) throw new ObjectNotFoundException("You can't book your item");
+        if (item.getOwner().getId() == bookerId) throw new ObjectNotFoundException("item",bookerId);
         if (!item.getAvailable()) throw new BadRequestException("Item not available now for booking");
         bookingDto.setStatus(BookingStatus.WAITING);
         Booking booking = bookingRepository.save(BookingMapper.toBooking(bookingDto, item, user));
@@ -53,10 +53,10 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public BookingResponseDto changeStatus(long userId, long bookingId, boolean approved) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> {
-            throw new ObjectNotFoundException("Booking not found");
+            throw new ObjectNotFoundException("Booking",bookingId);
         });
         Item item = booking.getItem();
-        if (userId != item.getOwner().getId()) throw new ObjectNotFoundException("You can't confirm this booking");
+        if (userId != item.getOwner().getId()) throw new ObjectNotFoundException("user",userId);
         if (booking.getStatus() == BookingStatus.APPROVED)
             throw new BadRequestException("You can't change status after approving");
         if (approved) {
@@ -68,18 +68,18 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponseDto getBookingInfo(long userId, long bookingId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> {
-            throw new ObjectNotFoundException("Booking not found");
+            throw new ObjectNotFoundException("Booking",bookingId);
         });
         Item item = booking.getItem();
         if (booking.getBooker().getId() == userId || item.getOwner().getId() == userId) {
             return BookingMapper.toBookingDtoResponse(booking);
-        } else throw new ObjectNotFoundException("Access denied");
+        } else throw new ObjectNotFoundException("User",userId);
     }
 
     @Override
     public List<BookingResponseDto> getByBooker(long userId, String state, int from, int size) {
         userRepository.findById(userId).orElseThrow(() -> {
-            throw new ObjectNotFoundException("User not found");
+            throw new ObjectNotFoundException("User",userId);
         });
         int page = from / size;
         PageRequest pg = PageRequest.of(page, size);
@@ -114,7 +114,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingResponseDto> getByOwner(long userId, String state, int from, int size) {
         userRepository.findById(userId).orElseThrow(() -> {
-            throw new ObjectNotFoundException("User not found");
+            throw new ObjectNotFoundException("User",userId);
         });
         int page = from / size;
         PageRequest pg = PageRequest.of(page, size);
