@@ -116,7 +116,7 @@ class ItemControllerTest {
     @Test
     void update_whenItemNotFound_thenObjectNotFoundThrown() throws Exception {
         ItemDto forUpdate = new ItemDto(1L, "updated", "updated description", true, null);
-        when(itemService.update(anyLong(), anyLong(), any())).thenThrow(new ObjectNotFoundException("Item not found"));
+        when(itemService.update(anyLong(), anyLong(), any())).thenThrow(new ObjectNotFoundException("Item",anyLong()));
 
         mvc.perform(patch("/items/1")
                         .content(objectMapper.writeValueAsString(forUpdate))
