@@ -33,7 +33,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public ItemRequestDto create(long userId, ItemRequestDto itemRequestDto) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User",userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User not found"));
         itemRequestDto.setCreated(LocalDateTime.now());
         ItemRequest itemRequest = requestRepository.save(ItemRequestMapper.toItemRequest(itemRequestDto, user));
         log.info("Request created");
@@ -42,7 +42,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public List<ItemRequestDtoResponse> getRequestsInfo(long userId) {
-        userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User",userId));
+        userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User not found"));
         List<ItemRequestDtoResponse> responseList = requestRepository.findAllByRequestorId(userId).stream()
                 .map(ItemRequestMapper::toItemRequestDtoResponse)
                 .collect(Collectors.toList());
@@ -51,9 +51,9 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public ItemRequestDtoResponse getRequestInfo(long userId, long requestId) {
-        userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User",userId));
+        userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User not found"));
         ItemRequest itemRequest = requestRepository.findById(requestId).orElseThrow(() ->
-                new ObjectNotFoundException("Request",requestId));
+                new ObjectNotFoundException("Request not found"));
         List<ItemDto> items = itemRepository.findByItemRequestId(requestId).stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());

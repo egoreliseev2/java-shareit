@@ -70,7 +70,7 @@ class ItemRequestServiceImplTest {
 
     @Test
     void create_whenUserNotFound_thenExceptionThrown() {
-        when(userRepository.findById(anyLong())).thenThrow(new ObjectNotFoundException("User",anyLong()));
+        when(userRepository.findById(anyLong())).thenThrow(new ObjectNotFoundException("User not found"));
 
         ObjectNotFoundException ex = assertThrows(ObjectNotFoundException.class, () -> itemRequestService.create(1L, itemRequestDto));
         assertEquals("User not found", ex.getMessage());
@@ -87,7 +87,7 @@ class ItemRequestServiceImplTest {
 
     @Test
     void getRequestsInfo_whenUserNotFound_thenExceptionThrown() {
-        when(userRepository.findById(anyLong())).thenThrow(new ObjectNotFoundException("User",anyLong()));
+        when(userRepository.findById(anyLong())).thenThrow(new ObjectNotFoundException("User not found"));
 
         ObjectNotFoundException ex = assertThrows(ObjectNotFoundException.class, () -> itemRequestService.getRequestsInfo(1L));
         assertEquals("User not found", ex.getMessage());
@@ -111,7 +111,7 @@ class ItemRequestServiceImplTest {
     @Test
     void getRequestInfo_whenRequestNotFound_thenExceptionThrown() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.ofNullable(user));
-        when(requestRepository.findById(anyLong())).thenThrow(new ObjectNotFoundException("request",anyLong()));
+        when(requestRepository.findById(anyLong())).thenThrow(new ObjectNotFoundException("Request not found"));
 
         ObjectNotFoundException ex = assertThrows(ObjectNotFoundException.class, () ->
                 itemRequestService.getRequestInfo(user.getId(), itemRequestDto.getId()));

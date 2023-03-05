@@ -62,7 +62,7 @@ class UserControllerTest {
 
     @Test
     void getById_whenUserNotFound_thenObjectNotFoundExceptionThrown() throws Exception {
-        when(userService.getById(2L)).thenThrow(new ObjectNotFoundException("User",2L));
+        when(userService.getById(2L)).thenThrow(new ObjectNotFoundException("User not found"));
 
         mvc.perform(get("/users/2")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -106,7 +106,7 @@ class UserControllerTest {
     @Test
     void update_whenUserNotFound_thenObjectNotFoundThrown() throws Exception {
         UserDto forUpdate = new UserDto(1L, "updated", "updated@test.ru");
-        when(userService.update(1L, forUpdate)).thenThrow(new ObjectNotFoundException("User",1L));
+        when(userService.update(1L, forUpdate)).thenThrow(new ObjectNotFoundException("User not found"));
 
         mvc.perform(patch("/users/1")
                         .content(objectMapper.writeValueAsString(forUpdate))
